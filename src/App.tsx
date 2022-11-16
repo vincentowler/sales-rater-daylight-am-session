@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Accessorial, getAccessorials } from "./services/accessorialsApi";
+import { CityState, getCityByZip } from "./services/citiesApi";
 
 function App() {
   const [accessorials, setAccessorials] = useState<Accessorial[]>([]);
+  const [originZone, setOriginZone] = useState("");
+  const [originCityState, setOriginCityState] = useState<CityState | null>(
+    null
+  );
 
   useEffect(() => {
     async function getData() {
@@ -19,7 +24,17 @@ function App() {
       <div>
         <label>Origin Zone</label>
         <br />
-        <input type="text" />
+        <input
+          type="text"
+          onChange={(event) => setOriginZone(event.target.value)}
+          onBlur={async () => {
+            const cityState = await getCityByZip(originZone);
+            setOriginCityState(cityState);
+          }}
+          value={originZone}
+        />
+        {originCityState &&
+          " " + originCityState.city + ", " + originCityState.state}
       </div>
       <label>Destination Zone</label>
       <br />
