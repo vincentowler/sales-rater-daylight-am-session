@@ -1,18 +1,17 @@
-type CityStateZip = {
+type CityStateZips = Record<number, CityState>;
+
+export type CityState = {
   city: string;
   state: string;
-  zips: number[];
 };
 
-export const cityStateZips: CityStateZip[] = [
-  {
+export const cityStateZips: CityStateZips = {
+  10001: {
     city: "New York",
     state: "NY",
-    zips: [10001, 10002],
   },
-  {
+  90001: {
     city: "Los Angeles",
     state: "CA",
-    zips: [90001, 90002],
   },
-];
+};
