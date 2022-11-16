@@ -16,7 +16,7 @@ export const handlers = [
     `${baseUrl}/internal/v1/self-service/rater/city-by-zip/:zip`,
     (req, res, ctx) => {
       const { zip } = req.params;
-      if (!Number.isInteger(zip)) return res(ctx.status(400));
+      if (!Number.isInteger(Number(zip))) return res(ctx.status(400));
       const matchingCity = cityStateZips[zip as unknown as number];
       if (!matchingCity) return res(ctx.status(404));
       return res(ctx.status(200), ctx.json(matchingCity));
