@@ -1,4 +1,6 @@
-export const accessorials = [
+import { Accessorial } from "../../services/accessorialsApi";
+
+export const accessorials: Accessorial[] = [
   {
     chargeDescription: "Appointment Fee",
     charge: 21.0,
