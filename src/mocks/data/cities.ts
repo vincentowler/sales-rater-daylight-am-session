@@ -1,9 +1,6 @@
-type CityStateZips = Record<number, CityState>;
+import { CityState } from "../../services/citiesApi";
 
-export type CityState = {
-  city: string;
-  state: string;
-};
+type CityStateZips = Record<number, CityState>;
 
 export const cityStateZips: CityStateZips = {
   10001: {
