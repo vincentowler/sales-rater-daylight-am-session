@@ -1,4 +1,4 @@
-const baseUrl = import.meta.env.VITE_SALES_RATER_API_BASE_URL;
+import { urls } from "../utils/urlUtils";
 
 export type CityState = {
   city: string;
@@ -6,8 +6,7 @@ export type CityState = {
 };
 
 export async function getCityByZip(zip: string) {
-  const url = `${baseUrl}/internal/v1/self-service/rater/city-by-zip/${zip}`;
-  const res = await fetch(url);
+  const res = await fetch(urls.cityByZip(zip));
   if (!res.ok) throw res;
   return res.json() as Promise<CityState>;
 }

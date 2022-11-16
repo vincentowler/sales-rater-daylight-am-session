@@ -1,4 +1,4 @@
-const baseUrl = import.meta.env.VITE_SALES_RATER_API_BASE_URL;
+import { urls } from "../utils/urlUtils";
 
 export type Accessorial = {
   chargeDescription: string;
@@ -9,8 +9,7 @@ export type Accessorial = {
 };
 
 export async function getAccessorials() {
-  const url = `${baseUrl}/internal/v1/self-service/rater/accessorials`;
-  const res = await fetch(url);
+  const res = await fetch(urls.accessorials);
   if (!res.ok) throw res;
   return res.json() as Promise<Accessorial[]>;
 }
