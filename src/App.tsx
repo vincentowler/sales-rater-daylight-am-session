@@ -22,9 +22,10 @@ function App() {
   return (
     <>
       <div>
-        <label>Origin Zone</label>
+        <label htmlFor="origin-zone">Origin Zone</label>
         <br />
         <input
+          id="origin-zone"
           type="text"
           onChange={(event) => setOriginZone(event.target.value)}
           onBlur={async () => {
@@ -40,9 +41,31 @@ function App() {
       <br />
       <input type="text" />
 
-      {accessorials.map((accessorial) => (
-        <div>{accessorial.chargeDescription}</div>
-      ))}
+      <section>
+        <h2>Accessorials</h2>
+        <table>
+          <caption>Accessorials</caption>
+          <thead>
+            <tr>
+              <th>Accessorial Charges</th>
+              <th>Charge</th>
+            </tr>
+          </thead>
+          <tbody>
+            {accessorials.map((accessorial) => (
+              <tr>
+                <td>
+                  <input type="checkbox" id={accessorial.chargeDescription} />
+                  <label htmlFor={accessorial.chargeDescription}>
+                    {accessorial.chargeDescription}
+                  </label>
+                </td>
+                <td>{accessorial.charge}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
     </>
   );
 }
