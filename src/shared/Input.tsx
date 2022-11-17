@@ -21,7 +21,7 @@ type InputProps = {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 
   /** Called onBlur */
-  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 
   /** Input value */
   value: string;
