@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { Accessorial, getAccessorials } from "./services/accessorialsApi";
 import { CityState, getCityByZip } from "./services/citiesApi";
+import Input from "./shared/Input";
+import TotalCharges from "./TotalCharges";
 
 function App() {
   const [accessorials, setAccessorials] = useState<Accessorial[]>([]);
@@ -22,11 +24,9 @@ function App() {
   return (
     <>
       <div>
-        <label htmlFor="origin-zone">Origin Zone</label>
-        <br />
-        <input
+        <Input
+          label="Origin Zone"
           id="origin-zone"
-          type="text"
           onChange={(event) => setOriginZone(event.target.value)}
           onBlur={async () => {
             const cityState = await getCityByZip(originZone);
@@ -70,6 +70,7 @@ function App() {
           </tbody>
         </table>
       </section>
+      <TotalCharges />
     </>
   );
 }
