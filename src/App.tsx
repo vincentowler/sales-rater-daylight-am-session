@@ -5,12 +5,16 @@ import { CityState, getCityByZip } from "./services/citiesApi";
 import Input from "./shared/Input";
 import TotalCharges from "./TotalCharges";
 
+type Errors = {
+  originZone?: string;
+  destinationZone?: string;
+};
+
 function App() {
   const [accessorials, setAccessorials] = useState<Accessorial[]>([]);
   const [originZone, setOriginZone] = useState("");
-  const [originCityState, setOriginCityState] = useState<CityState | null>(
-    null
-  );
+  const [originCityState, setOriginCityState] =
+    useState<CityState | null>(null);
 
   useEffect(() => {
     async function getData() {
@@ -21,10 +25,22 @@ function App() {
     // Empty array means run this useEffect one time after the first render.
   }, []);
 
+  function validateForm() {
+    const errors: Errors = {};
+    if (originZone.length !== 5) {
+      errors.originZone = "Origin Zone must be a valid 5 digit Zip code.";
+    }
+    return errors;
+  }
+
+  // Derived state - Using existing state to determine if the form has errors.
+  const errors = validateForm();
+
   return (
     <>
       <div>
         <Input
+          error={errors.originZone}
           label="Origin Zone"
           id="origin-zone"
           onChange={(event) => setOriginZone(event.target.value)}
@@ -71,6 +87,13 @@ function App() {
         </table>
       </section>
       <TotalCharges />
+      <button
+        onClick={() => {
+          validateForm();
+        }}
+      >
+        Calculate
+      </button>
     </>
   );
 }
