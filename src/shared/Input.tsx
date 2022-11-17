@@ -11,6 +11,9 @@ type InputProps = {
    */
   id: string;
 
+  /** Display an optional error message. */
+  error?: string;
+
   /** Input's label */
   label: string;
 
@@ -31,6 +34,7 @@ export default function Input({
   id,
   label,
   type = "text",
+  error,
   onChange,
   onBlur,
   value,
@@ -46,6 +50,7 @@ export default function Input({
         onBlur={onBlur}
         value={value}
       />
+      {error && <div style={{ color: "red" }}>{error}</div>}
     </div>
   );
 }
