@@ -52,8 +52,12 @@ function App() {
             </tr>
           </thead>
           <tbody>
+            {/* NOTE: A good key is a unique and stable identifier. 
+            Typically a primary key from the DB is the best choice.
+            Avoid using the array index as a key because doing so provides no performance benefit 
+            (it merely quiets the warning). */}
             {accessorials.map((accessorial) => (
-              <tr>
+              <tr key={accessorial.chargeDescription}>
                 <td>
                   <input type="checkbox" id={accessorial.chargeDescription} />
                   <label htmlFor={accessorial.chargeDescription}>
