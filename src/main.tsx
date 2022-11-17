@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
-if (process.env.NODE_ENV === "development") {
+if (import.meta.env.VITE_ENABLE_MOCKS === "Y") {
   const { worker } = await import("./mocks/browser");
   worker.start();
 }
