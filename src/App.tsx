@@ -26,6 +26,7 @@ function App() {
   const [touched, setTouched] = useState<Touched>({});
   const [originCityState, setOriginCityState] =
     useState<CityState | null>(null);
+  const [pageError, setPageError] = useState<Error | null>(null);
 
   useEffect(() => {
     async function getData() {
@@ -50,6 +51,8 @@ function App() {
   // Derived state - Using existing state to determine if the form has errors.
   const errors = validateForm();
 
+  if (pageError) throw pageError;
+
   return (
     <>
       <div>
@@ -59,14 +62,18 @@ function App() {
           id="origin-zone"
           onChange={(event) => setOriginZone(event.target.value)}
           onBlur={async () => {
-            // Using the function form of set state to safely reference existing state.
-            // Wrapping right-hand side in parentheses so we can omit the return keyword and it's not interpreted as a block.
-            setTouched((touched) => ({ ...touched, originZone: true }));
+            try {
+              // Using the function form of set state to safely reference existing state.
+              // Wrapping right-hand side in parentheses so we can omit the return keyword and it's not interpreted as a block.
+              setTouched((touched) => ({ ...touched, originZone: true }));
 
-            // Only fetch if there's a value provided
-            if (originZone) {
-              const cityState = await getCityByZip(originZone);
-              setOriginCityState(cityState);
+              // Only fetch if there's a value provided
+              if (originZone) {
+                const cityState = await getCityByZip(originZone);
+                setOriginCityState(cityState);
+              }
+            } catch (error) {
+              setPageError(error as Error);
             }
           }}
           value={originZone}
@@ -107,9 +114,11 @@ function App() {
           </tbody>
         </table>
       </section>
+
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <TotalCharges />
       </ErrorBoundary>
+
       <button
         onClick={() => {
           validateForm();
