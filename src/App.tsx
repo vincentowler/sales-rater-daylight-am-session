@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import "./App.css";
 import { Accessorial, getAccessorials } from "./services/accessorialsApi";
 import { CityState, getCityByZip } from "./services/citiesApi";
+import ErrorFallback from "./shared/ErrorFallback";
 import Input from "./shared/Input";
 import TotalCharges from "./TotalCharges";
 
@@ -105,7 +107,9 @@ function App() {
           </tbody>
         </table>
       </section>
-      <TotalCharges />
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <TotalCharges />
+      </ErrorBoundary>
       <button
         onClick={() => {
           validateForm();
