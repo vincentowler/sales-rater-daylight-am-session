@@ -50,7 +50,11 @@ export default function Input({
         onBlur={onBlur}
         value={value}
       />
-      {error && <div style={{ color: "red" }}>{error}</div>}
+      {error && (
+        <div role="alert" style={{ color: "red" }}>
+          {error}
+        </div>
+      )}
     </div>
   );
 }
