@@ -5,14 +5,23 @@ import { CityState, getCityByZip } from "./services/citiesApi";
 import Input from "./shared/Input";
 import TotalCharges from "./TotalCharges";
 
-type Errors = {
+interface Errors {
   originZone?: string;
   destinationZone?: string;
-};
+}
+
+interface Touched {
+  originZone?: boolean;
+  destinationZone?: boolean;
+}
+
+type Status = "idle" | "submitted";
 
 function App() {
   const [accessorials, setAccessorials] = useState<Accessorial[]>([]);
   const [originZone, setOriginZone] = useState("");
+  const [status, setStatus] = useState<Status>("idle");
+  const [touched, setTouched] = useState<Touched>({});
   const [originCityState, setOriginCityState] =
     useState<CityState | null>(null);
 
@@ -27,7 +36,10 @@ function App() {
 
   function validateForm() {
     const errors: Errors = {};
-    if (originZone.length !== 5) {
+    if (
+      (status === "submitted" || touched.originZone) &&
+      originZone.length !== 5
+    ) {
       errors.originZone = "Origin Zone must be a valid 5 digit Zip code.";
     }
     return errors;
@@ -45,8 +57,15 @@ function App() {
           id="origin-zone"
           onChange={(event) => setOriginZone(event.target.value)}
           onBlur={async () => {
-            const cityState = await getCityByZip(originZone);
-            setOriginCityState(cityState);
+            // Using the function form of set state to safely reference existing state.
+            // Wrapping right-hand side in parentheses so we can omit the return keyword and it's not interpreted as a block.
+            setTouched((touched) => ({ ...touched, originZone: true }));
+
+            // Only fetch if there's a value provided
+            if (originZone) {
+              const cityState = await getCityByZip(originZone);
+              setOriginCityState(cityState);
+            }
           }}
           value={originZone}
         />
@@ -90,6 +109,7 @@ function App() {
       <button
         onClick={() => {
           validateForm();
+          setStatus("submitted");
         }}
       >
         Calculate
