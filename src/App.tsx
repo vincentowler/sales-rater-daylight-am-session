@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import AccessorialsTable from "./AccessorialsTable";
 import "./App.css";
 import { Accessorial, getAccessorials } from "./services/accessorialsApi";
 import { CityState, getCityByZip } from "./services/citiesApi";
 import ErrorFallback from "./shared/ErrorFallback";
 import Input from "./shared/Input";
+import Spinner from "./shared/Spinner";
 import TotalCharges from "./TotalCharges";
 
 interface Errors {
@@ -27,10 +29,13 @@ function App() {
   const [originCityState, setOriginCityState] =
     useState<CityState | null>(null);
   const [pageError, setPageError] = useState<Error | null>(null);
+  // Defaulting to true so that the user sees a loading spinner on initial load.
+  const [isLoadingAccessorials, setIsLoadingAccessorials] = useState(true);
 
   useEffect(() => {
     async function getData() {
       const accessorialsResp = await getAccessorials();
+      setIsLoadingAccessorials(false);
       setAccessorials(accessorialsResp);
     }
     getData();
@@ -87,32 +92,11 @@ function App() {
 
       <section>
         <h2>Accessorials</h2>
-        <table>
-          <caption>Accessorials</caption>
-          <thead>
-            <tr>
-              <th>Accessorial Charges</th>
-              <th>Charge</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* NOTE: A good key is a unique and stable identifier. 
-            Typically a primary key from the DB is the best choice.
-            Avoid using the array index as a key because doing so provides no performance benefit 
-            (it merely quiets the warning). */}
-            {accessorials.map((accessorial) => (
-              <tr key={accessorial.chargeDescription}>
-                <td>
-                  <input type="checkbox" id={accessorial.chargeDescription} />
-                  <label htmlFor={accessorial.chargeDescription}>
-                    {accessorial.chargeDescription}
-                  </label>
-                </td>
-                <td>{accessorial.charge}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {isLoadingAccessorials ? (
+          <Spinner />
+        ) : (
+          <AccessorialsTable accessorials={accessorials} />
+        )}
       </section>
 
       <ErrorBoundary FallbackComponent={ErrorFallback}>
